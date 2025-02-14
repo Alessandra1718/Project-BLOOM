@@ -5,4 +5,5 @@ I am working with three other teamates however all work will be uploaded here (b
 Most of the code will be written in replit, Arduino IDE or an arduino online simulator such as Wokwi or TinkerCad, updated weekly 
 
 Our main project website: https://capstone-project-bloom.weebly.com/ 
+Instagram: @projectbloom25 
 

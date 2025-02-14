@@ -16,14 +16,14 @@ void setup() {
 
 void loop() {
  soilMoistureSensor(capSensorPin);
-//call this functionto hopefully run the sensor 
+//call this function to run the sensor 
   //I should later move/include the sleep (); and delay(); in this main loop instead 
   //and make the long if loop/ operations from this function data -> watering pump connection 
 }
 
 void soilMoistureSensor(sensorInput){
   //this might be a bad parameter name but we can fix that later 
-//this functino will call the moistuer sensor 
+//this functino will call the moisture sensor 
   // change the parameter to include the pin of the moisture sensor 
 
   //take the data : 

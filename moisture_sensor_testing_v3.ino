@@ -4,7 +4,7 @@ correct values for our sensor )
 */
 
 //is it worth having this in a separate function for the testing code? should I just put this in the main loop to calibrate it 
-
+// this takes up 9% of memory, leaving ~1000 bytes of space out of the ~2000 byte memory 
 //internet sources: (calibration)
 #define capSensorPin A0
 
@@ -30,7 +30,7 @@ void soilMoistureSensor(int sensorInput){
   Serial.println(value);
   //print the value and then enter to next line
 
-//sleep is the most effiecnt -> it turns off the machine to low power mode ( but for the purposes of this testing we need to delay the program )
+//sleep is the most efficient -> it turns off the machine to low power mode ( but for the purposes of this testing we need to delay the program )
   delay(2000);
   //lower number means more moisture -> higher number means dryer moistures 
 

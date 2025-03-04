@@ -1,30 +1,32 @@
 /*
-This will be a code for the moisture sensor - so that we are ready to connect it once it arrives in the mail 
-I will be coding this into a function so that I can simply add it into the main document 
-and call the function later ^^ 
+I will be coding this into a function so that I can add it into the main document 
+and call the function later
 */
 
-// Define analog input- defined constants don't take up any memory on the arduino chip ( good for optimization)
+// Define analog input- defined constants don't take up any memory on the arduino chip (good for optimization)
 #define capSensorPin A0
 //capSensorPin is the name of the A0 output pin ( connected to the mositure sensor)
 
 void setup() {
       Serial.begin(9600);
-  //begin serial monitor ( might change the bits/sec)
+      Serial.print("This is the start of Capacitative Moisture sensor function code ");
+      Serial.print("\n");
+  //begin serial monitor (might change the bits/sec later)
   //guide : https://docs.arduino.cc/language-reference/en/functions/communication/serial/begin/ 
 }
 
 void loop() {
  soilMoistureSensor(capSensorPin);
+  
 //call this function to run the sensor 
   //I should later move/include the sleep (); and delay(); in this main loop instead 
-  //and make the long if loop/ operations from this function data -> watering pump connection 
+  //and make the long if loop/ operations from this function data -> water pump connection 
 }
 
-void soilMoistureSensor(sensorInput){
+void soilMoistureSensor(int sensorInput){
   //this might be a bad parameter name but we can fix that later 
-//this functino will call the moisture sensor 
-  // change the parameter to include the pin of the moisture sensor 
+  //this function will call the moisture sensor 
+  // change the parameter to include the pin of the moisture sensor (??)
 
   //take the data : 
   int value = analogRead(sensorInput);
@@ -32,17 +34,18 @@ void soilMoistureSensor(sensorInput){
   // ( better to just call data from serial monitor directly? )
   //^ this could be usefull when we transfer to bluetooth and have to send the data instead of the serial monitor 
 
-  //for now, this will be in this function, later we should take it out (change it )
-
   // Print the value to the serial monitor
   Serial.print("Analog output: ");
   Serial.print(value\n);
   //print the value and then enter to next line
-      
-  // set the machine to sleep for 2 seconds 
-  // ( is this efficient? should I just put delay instead( what is the difference )? )
-  sleep(2000);
-
   
+  delay(2000);
 }
+
+/*
+The plan is to run soilMoistureSensor() a few times, and then store the avg measurements in a variable that will determine the water 
+pump activity later 
+
+also there should be a loop for the soilMoistureSensor() function, and after a few measurements it should go to sleep for a few minutes
+this part will go into the main loop */
 

@@ -33,7 +33,20 @@ void soilMoistureSensor(int sensorInput){
 //sleep is the most efficient -> it turns off the machine to low power mode ( but for the purposes of this testing we need to delay the program )
   delay(2000);
   //lower number means more moisture -> higher number means dryer moistures 
-
-  
 }
+
+/*
+Our testing as of Mar 2 2025 : 
+Air: 453-454 
+Hand: 230-320 
+Water: 198-201 
+Drop of water: 430 
+Dirt outside:460 
+Wet dirt:441(389)
+dirt that stella stabbed:430
+
+Wire length needs to be longer 
+
+*/
+
 

@@ -1,7 +1,7 @@
 /*
 This code is just to test our new arduino board and see if it works properly 
 We tested our breadboard and LEDs as well, connecting the GND and 13 pins respectively to the Red LED 
-Next step : bring a battery pack and 
+Next step : bring a battery pack and see if it can work autonomously
 */
 
 void setup() {

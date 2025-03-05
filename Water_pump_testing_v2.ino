@@ -9,6 +9,8 @@ const int relayWaterPump = 2
 
 void setup() {
   Serial.begin(9600);
+  pinMode(relayWaterPump, OUTPUT);
+
 }
 
 void loop() {

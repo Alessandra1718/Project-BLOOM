@@ -16,14 +16,15 @@ void setup() {
 }
 
 void loop() {
- soilMoistureSensor(capSensorPin);
-  
+ //soilMoistureSensor(capSensorPin);
+  Serial.println(soilMoistureSensor(capSensorPin));
+
 //call this function to run the sensor 
   //I should later move/include the sleep (); and delay(); in this main loop instead 
   //and make the long if loop/ operations from this function data -> water pump connection 
 }
 
-void soilMoistureSensor(int sensorInput){
+int soilMoistureSensor(int sensorInput){
   //this might be a bad parameter name but we can fix that later 
   //this function will call the moisture sensor 
   // change the parameter to include the pin of the moisture sensor (??)
@@ -40,6 +41,8 @@ void soilMoistureSensor(int sensorInput){
   //print the value and then enter to next line
   
   delay(2000);
+return int(value);
+
 }
 
 /*

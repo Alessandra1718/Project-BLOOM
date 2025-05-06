@@ -31,6 +31,18 @@ if (humTemp <= 26){
 
   //if the temp is more than 27, then call the watering function or check all the other stages
   //which sensor is most important here? the hierarchy will go water pump ( if recently watered)-> temperature -> then moisture sensor
+}else if(humTemp <= 2){
+    Serial.println("temp is under 2, it is freezing or less, so we will not water, and send a message of temp to the user ");
+  delay(3000);
+
+  //if the temp is less than 2 degrees C, then that means its somewhere near freezing or really cold -> don't water ( it can harm the plant)
+  // and give a warning message to the user 
+}else if(humTemp >= 36){
+    Serial.println("temp is over 36, these are dangerously hot temperatures for prolonged exposure please be careful if the temp goes up  ");
+  delay(3000);
+
+  //if the temp is over human body heat, it means it is starting to heat up and then something will have to change in the descision process 
+  // the plant will have to be watered more because of the temperatures and water might evaporate quicker than it can be consumed 
 }else{
   Serial.println("humdity sensor has reached a pt of ??? not 27 or 26 value ");// extra else just in case, ALSO it won't let me type point 
     delay(3000);

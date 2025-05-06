@@ -1,0 +1,58 @@
+//This is the version of the humidity sensor file to test the sensor and calibrate it 
+
+#include <dht.h>
+//library for dht stuff
+
+dht DHT;
+// decalres an object named dht out of the DHT class of humdity sensors 
+
+#define DHT11_PIN 7
+//pin 7 
+
+void  setup(){
+  Serial.begin(9600);  // Start serial communication
+}
+
+void loop(){
+
+  int chk = DHT.read11(DHT11_PIN);  // check the data coming from the DHT pin
+
+int humTemp = DHT.temperature; 
+if (humTemp <= 26){
+  // if the temperature is less than 26 degrees then the plants dont really need water, turn it off 
+  Serial.println("temp is under 26, we will not water here");
+  delay(3000);
+}else if(humTemp >= 27){
+    Serial.println("temp is over 27, we will water here");
+  delay(3000);
+
+  //if the temp is more than 27, then call the watering function or check all the other stages
+  //which sensor is most important here? the hierarchy will go water pump ( if recently watered)-> temperature -> then moisture sensor
+}else{
+  Serial.println("humdity sensor has reached a pt of ??? not 27 or 26 value ");// extra else just in case, ALSO it won't let me type point 
+    delay(3000);
+
+}; 
+//add a case for freezing temperatures, it is not good to water in freezing temperatures 
+
+  //temp printing : 
+  Serial.print("Temperature = ");  // print temperature on the serial monitor
+  Serial.println(DHT.temperature);
+  
+  //humidity printing : 
+  Serial.print("Humidity = ");// Print humidity on the serial monitor
+  Serial.println(DHT.humidity);
+
+  delay(2000);//wait a bit before reprinting it again 
+}
+
+
+/*Here are the connections
+temp avg - 22 C
+hum avg - 44 or 43 %
+squeezing it with your hand for a few cycels of measurments will bring up the humidity rapidly to 95%, while the temp will take a while to change but 
+will go over 26 and will reach the " water here now" if else loop 
+check serial export 9 csv to check the data for this one 
+     */ 
+
+

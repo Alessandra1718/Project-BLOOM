@@ -1,4 +1,7 @@
 //This is the version of the humidity sensor file to test the sensor and calibrate it 
+//this is DHT11, a humidity sensor that measures humidity in percent ( 0% - 100%, more water in the air makes the number higher) 
+// and the temperature in degrees Celcius 
+// the plan is to use this component to add another layer of descision making based on the avg temperature that this will measure over some days, or if the temperature is freezing 
 
 #include <dht.h>
 //library for dht stuff

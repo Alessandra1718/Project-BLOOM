@@ -1,0 +1,87 @@
+
+#include <dht.h>
+#include <LiquidCrystal_I2C.h>
+#include <LiquidCrystal.h>
+//bring in the library for the lcd screen 
+
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 8;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+//https://docs.arduino.cc/learn/electronics/lcd-displays/ 
+
+
+//LiquidCrystal_I2C  lcd = liquidCrystal_I2C(0x27, 20, 4)
+//check how to connect LCD screen cause idk how to do that 
+
+
+dht DHT;
+// decalres an object named dht out of the DHT class of humdity sensors 
+
+#define DHT11_PIN 7
+
+void  setup(){
+  //lcd.init(); // initialise I2C LCD
+  lcd.begin(16,2);
+ // lcd.backlight(); // Turn On  the backlight of the I2C LCD
+  Serial.begin(9600);  // Start serial communication
+
+}
+
+void loop(){
+
+  int chk = DHT.read11(DHT11_PIN);  // check the data coming from the DHT pin
+// what is chk for ? 
+
+int humTemp = DHT.temperature; 
+  if (humTemp <= 26){
+  // if the temperature is less than 26 degrees then the plants dont really need water, turn it off 
+  Serial.println("temp is under 26, we will not water here");
+  delay(3000);
+}else if(humTemp >= 27){
+    Serial.println("temp is over 27, we will water here");
+  delay(3000);
+
+  //if the temp is more than 27, then call the watering function or check all the other stages
+  //which sensor is most important here? the hierarchy will go water pump ( if recently watered)-> temperature -> then moisture sensor
+}else if(humTemp <= 2){
+    Serial.println("temp is under 2, it is freezing or less, so we will not water, and send a message of temp to the user ");
+  delay(3000);
+
+  //if the temp is less than 2 degrees C, then that means its somewhere near freezing or really cold -> don't water ( it can harm the plant)
+  // and give a warning message to the user 
+}else if(humTemp >= 36){
+    Serial.println("temp is over 36, these are dangerously hot temperatures for prolonged exposure please be careful if the temp goes up  ");
+  delay(3000);
+
+  //if the temp is over human body heat, it means it is starting to heat up and then something will have to change in the descision process 
+  // the plant will have to be watered more because of the temperatures and water might evaporate quicker than it can be consumed 
+}else{
+  Serial.println("humdity sensor has reached a pt of ??? not 27 or 26 value ");// extra else just in case, ALSO it won't let me type point 
+    delay(3000);
+
+}; 
+
+  
+  //first line: 
+  lcd.setCursor(0,0); 
+
+  //temp printing : 
+  lcd.print("Temp: ");
+  lcd.print(DHT.temperature); // print temperature on LCD screen 
+  lcd.print((char)223);
+  lcd.print("C"); // celcius degree sign 
+  Serial.print("Temperature = ");  // print temperature on the serial monitor
+  Serial.println(DHT.temperature);
+
+  // new line : 
+  lcd.setCursor(0,1);
+  
+  //humidity printing : 
+  lcd.print("Humidity:  ");
+  lcd.print(DHT.humidity);
+  lcd.print("%");
+  Serial.print("Humidity = ");// Print humidity on the serial monitor
+  Serial.println(DHT.humidity);
+
+  delay(2000);//wait a bit before reprinting it again 
+}
+

@@ -1,0 +1,199 @@
+/*
+
+OK SO : this is the may 5th main sketch branch, some of the text below has to be updated but I dont have time-> this will try to implement the choice for the user of cactus no cactus plant, by puttin ghting sin variables -> this was copied off the sketchqow3029i201309 april 21 2025 version I hope it has the right values 
+idk how to remake this out into smaller verions, we might need to cut some stuf fhere and integrate other things as well, or we might need to do this whole thing in a separate little sketch.... idk yet May 5th 2025, but it needs to get done somehow! 
+( will later integrate system with the humidity sensor and stuff, and pWM modulation for the water pump _> i need a flow chart for this )
+
+main sketch variation - different branch, this is an alternate version of code 
+
+
+MAY 13 : 
+<400 water and then above 400 do not water because of stuff like that ! 
+
+
+to maybe switch the sensor values to make it so that it waters things at a reasonable moisture level
+APR 1 - IT WORKS !! Refer to serial monitor log (4)
+it works when held and it goes to 296 ( OFF)
+in air 446 ( ON )
+*/
+//keep an eye on bits and program space mitigation 
+//declare variables and pins here : 
+
+#define capSensorPin A0
+//capacitiative moisture sensor, imported from moisture sensor v3 
+int value; 
+//global variable - > the one inside the cap mositure sensor thing 
+int sensorAvg; 
+//the averadge of the mositure sensor readings 
+
+// relay water pump connected to pin 2 and GND on arduino 
+const int relayWaterPump = 2 ;
+
+
+//cactus or no cactus variable : 
+
+//values that will be changed based on the type of plant 
+int moistVal;
+int tempVal;
+int humVal; 
+
+
+//this is the code you need to do : PWM modulation stuff 
+/*int ledPin = 9;      // LED connected to digital pin 9
+int analogPin = A0;  // potentiometer connected to analog pin A0
+int val = 0;         // variable to store the read value
+*/
+
+//stuff imported from humidity sensor v2 
+#include <dht.h>
+#include <LiquidCrystal_I2C.h>
+//#include <LiquidCrystal.h>
+//bring in the library for the lcd screen 
+
+LiquidCrystal_I2C  lcd(0x27, 20, 4);
+//check how to connect LCD screen cause idk how to do that 
+dht DHT;
+// decalres an object named dht out of the DHT class of humdity sensors 
+#define DHT11_PIN 7
+
+
+/*
+
+void setup() {
+  pinMode(ledPin, OUTPUT);  // sets the pin as output
+}
+
+void loop() {
+  val = analogRead(analogPin);  // read the input pin
+  analogWrite(ledPin, val / 4); // analogRead values go from 0 to 1023, analogWrite values from 0 to 255
+}
+*/
+
+void setup() {
+  Serial.begin(9600);
+    lcd.init(); // initialise I2C LCD
+  //lcd.begin(16,2);
+  lcd.backlight(); // Turn On  the backlight of the I2C LCD
+
+  Serial.println("This is the start of main arduino program code, lots of debugging prints to follow:  ");
+  Serial.print("Water pump testing starts (output set): ");
+  pinMode(relayWaterPump, OUTPUT);
+  //set the water pump to testing 
+delay(5000);
+}
+
+void loop() {
+  //take the avg of sensor readings 
+ //sensorAvg = soilMoistureSensor(capSensorPin);
+  
+  soilMoistureSensor(capSensorPin);
+  //sensor function here 
+  
+  //main algorithm loop: 
+if (soilMoistureSensor(capSensorPin) >= 400){
+  //waterPump("Yes");
+  Serial.println("moisture > 400, water pump TRUE (working) ");
+  digitalWrite(relayWaterPump, HIGH);
+  delay(1000);
+
+}else if (soilMoistureSensor(capSensorPin) < 400){ 
+  //waterPump("No");
+  Serial.println("moisture < 400, water pump FALSE (off) ");
+  digitalWrite(relayWaterPump, LOW);
+  delay(3000);
+  //wait before taking the next measurement ( should this delay be somewhre else ? )
+}else{ 
+  Serial.println("Its reached the extra else. its not < or > 400 of reading soil. Used for debugging. water pump OFF  ");
+  digitalWrite(relayWaterPump, LOW);
+//in theory it should work when held and turn off when its in the air 
+}
+printingFunction();
+  
+    
+}
+
+
+//This is the function for the capacitative moisture sensor 
+int soilMoistureSensor(int sensorPinInput){
+  //this function will call the moisture sensor 
+  
+  //take the data : 
+  int value = analogRead(sensorPinInput);
+
+  // Print the value to the serial monitor
+  Serial.print("Analog output of sensor: ");
+  Serial.println(value);
+  //print the value and then enter to next line
+  
+  delay(2000);
+  return int(value); 
+  Serial.println("value has been returned");
+  
+}
+
+
+void printingFunction(){
+  //humidity stuff here : 
+int chk = DHT.read11(DHT11_PIN);  
+// check the data coming from the DHT pin
+
+int humTemp = DHT.temperature;
+
+if (humTemp <= 26){
+  // if the temperature is less than 26 degrees then the plants dont really need water, turn it off 
+  Serial.println("temp is under 26, we will not water here");
+  delay(3000);
+}else if(humTemp >= 27){
+    Serial.println("temp is over 27, we will water here");
+  delay(3000);
+
+  //if the temp is more than 27, then call the watering function or check all the other stages
+  //which sensor is most important here? the hierarchy will go water pump ( if recently watered)-> temperature -> then moisture sensor
+}else if(humTemp <= 2){
+    Serial.println("temp is under 2, it is freezing or less, so we will not water, and send a message of temp to the user ");
+  delay(3000);
+
+  //if the temp is less than 2 degrees C, then that means its somewhere near freezing or really cold -> don't water ( it can harm the plant)
+  // and give a warning message to the user 
+}else if(humTemp >= 36){
+    Serial.println("temp is over 36, these are dangerously hot temperatures for prolonged exposure please be careful if the temp goes up  ");
+  delay(3000);
+
+  //if the temp is over human body heat, it means it is starting to heat up and then something will have to change in the descision process 
+  // the plant will have to be watered more because of the temperatures and water might evaporate quicker than it can be consumed 
+}else{
+  Serial.println("humdity sensor has reached a pt of ??? not 27 or 26 value ");// extra else just in case, ALSO it won't let me type point 
+    delay(3000);
+
+};   
+  //first line: 
+  lcd.setCursor(0,0); 
+
+  //temp printing : 
+  lcd.print("Temp: ");
+  lcd.print(DHT.temperature); // print temperature on LCD screen 
+  lcd.print((char)223);
+  lcd.print("C"); // celcius degree sign 
+  Serial.print("Temperature = ");  // print temperature on the serial monitor
+  Serial.println(DHT.temperature);
+
+  // new line : 
+  lcd.setCursor(0,1);
+  
+  //humidity printing : 
+  lcd.print("Humidity:  ");
+  lcd.print(DHT.humidity);
+  lcd.print("%");
+  Serial.print("Humidity = ");// Print humidity on the serial monitor
+  Serial.println(DHT.humidity);
+
+  delay(2000);//wait a bit before reprinting it again 
+  
+}
+
+/*
+The plan is to run soilMoistureSensor() a few times, and then store the avg measurements in a variable that will determine the water 
+pump activity later 
+
+also there should be a loop for the soilMoistureSensor() function, and after a few measurements it should go to sleep for a few minutes
+this part will go into the main loop - Feb 2025*/

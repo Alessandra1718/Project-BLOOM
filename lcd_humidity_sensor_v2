@@ -1,5 +1,6 @@
 //this is the version that will include the LCD screen 
-//may 9th -> redid some of the code, this needs to be reconnected and redone or something ? 
+//may 9th -> redid some of the code, this needs to be reconnected and redone
+//May 20th 2025, works and connects to the LCD screen correctly, shows all the data, next step is to connect this to the main branch of code
 
 
 //#include "Wire.h" // Library for I2C communication

@@ -1,37 +1,45 @@
+//this is the version that will include the LCD screen 
+//may 9th -> redid some of the code, this needs to be reconnected and redone or something ? 
+
+
+//#include "Wire.h" // Library for I2C communication
+//#include "LiquidCrystal_I2C.h" // Library for LCD
 
 #include <dht.h>
 #include <LiquidCrystal_I2C.h>
-#include <LiquidCrystal.h>
+//#include <LiquidCrystal.h>
 //bring in the library for the lcd screen 
 
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 8;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+//LiquidCrystal_I2C lcd(0x27,  16, 2);
 //https://docs.arduino.cc/learn/electronics/lcd-displays/ 
 
+//const int SDA = A5;
+//const int SCL = A4;
 
-//LiquidCrystal_I2C  lcd = liquidCrystal_I2C(0x27, 20, 4)
+LiquidCrystal_I2C  lcd(0x27, 20, 4);
 //check how to connect LCD screen cause idk how to do that 
 
 
 dht DHT;
 // decalres an object named dht out of the DHT class of humdity sensors 
-
 #define DHT11_PIN 7
 
 void  setup(){
-  //lcd.init(); // initialise I2C LCD
-  lcd.begin(16,2);
- // lcd.backlight(); // Turn On  the backlight of the I2C LCD
+  lcd.init(); // initialise I2C LCD
+  //lcd.begin(16,2);
+   
+  lcd.backlight(); // Turn On  the backlight of the I2C LCD
   Serial.begin(9600);  // Start serial communication
 
 }
 
 void loop(){
 
-  int chk = DHT.read11(DHT11_PIN);  // check the data coming from the DHT pin
+  int chk = DHT.read11(DHT11_PIN);  
+// check the data coming from the DHT pin
 // what is chk for ? 
 
-int humTemp = DHT.temperature; 
+int humTemp = DHT.temperature;
   if (humTemp <= 26){
   // if the temperature is less than 26 degrees then the plants dont really need water, turn it off 
   Serial.println("temp is under 26, we will not water here");
@@ -85,3 +93,17 @@ int humTemp = DHT.temperature;
   delay(2000);//wait a bit before reprinting it again 
 }
 
+
+/*Here are the connections
+22      
+23      Take a DHT11 sensor.
+24      there, in the DHT11 sensor, there  are 3 or 4 pins.
+25      There, on the DHT11 sensor, there is writen S, +, -
+26      connect "S" on the digital pin 7.
+27      connect "+" on the 5V pin on  Arduino.
+28      connect "-" on the GND pin on Arduino.
+29      
+30      Thank  you
+31      Meet you in the next project.
+find the source for this + LCD connections https://projecthub.arduino.cc/arcaegecengiz/using-dht11-12f621 
+32      */ 
